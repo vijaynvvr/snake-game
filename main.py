@@ -33,16 +33,26 @@ while game_is_on:
         snake.extend()
         scoreboard.increase_score()
 
-    # detect collision with wall
-    if snake.head.xcor() >= 300 or snake.head.xcor() <= -300 or snake.head.ycor() >= 300 or snake.head.ycor() <= -300:
-        if screen.textinput(title='Play again', prompt='Yes or No : ').lower() == 'no':
-            game_is_on = False
-            scoreboard.game_over()
-        else:
-            snake.snake_reset()
-            scoreboard.score_reset()
-        screen.listen()  # since the text input screen comes, screen stops listening, so we need to call listen() again
+#     # detect collision with wall
+#     if snake.head.xcor() >= 300 or snake.head.xcor() <= -300 or snake.head.ycor() >= 300 or snake.head.ycor() <= -300:
+#         if screen.textinput(title='Play again', prompt='Yes or No : ').lower() == 'no':
+#             game_is_on = False
+#             scoreboard.game_over()
+#         else:
+#             snake.snake_reset()
+#             scoreboard.score_reset()
+#         screen.listen()  # since the text input screen comes, screen stops listening, so we need to call listen() again
 
+    # # if snake collides with one side of wall, it comes from opposite side of wall:
+    x = snake.head.xcor()
+    y = snake.head.ycor()
+    if snake.head.xcor() >= 300 or snake.head.xcor() <= -300:
+        x *= -1
+        snake.head.goto(x, y)
+    elif snake.head.ycor() >= 300 or snake.head.ycor() <= -300:
+        y *= -1
+        snake.head.goto(x, y)    
+        
     # detect collision with tail
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) <= 10:
